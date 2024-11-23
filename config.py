@@ -17,7 +17,7 @@ def cooltime():
 
 
 def load_config():
-    scouts_files = list(Path("./").rglob("*.png"))
+    scouts_files = list(Path("./scouts").rglob("*.png"))
     files = list(map(path_fix, scouts_files))
 
     ok = any(map(lambda f: not os.path.exists(f), files))

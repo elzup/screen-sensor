@@ -15,7 +15,7 @@ def main():
     files, ok = load_config()
 
     if not ok:
-        print("Some files are missing. ./scout/*.png is required.")
+        print("Some files are missing. ./scouts/*.png is required.")
         return
     else:
         print(f"All files are loaded. {len(files)} files.")
