@@ -1,6 +1,7 @@
 import pyautogui
 import time
-import os 
+import os
+import sys
 from pathlib import Path
 import cv2
 import numpy as np
@@ -9,19 +10,21 @@ import numpy as np
 files = [
     "C:/Users/guild/OneDrive/Videos/Captures/click-target-m.png",
     "C:/Users/guild/OneDrive/Videos/Captures/click-target-b.png",
-#    "C:/Users/guild/OneDrive/Videos/Captures/click-target-p.png"
+    #    "C:/Users/guild/OneDrive/Videos/Captures/click-target-p.png"
 ]
 
 
+def path_fix(f):
+    return str(Path(f))
 
-path_fix = lambda f: str(Path(f))
+
 files = list(map(path_fix, files))
+
 
 def locale_on_screen(target_paths):
     # スクリーンショットを取得
     screenshot = pyautogui.screenshot()
     screenshot = np.array(screenshot)  # PILからnumpy配列に変換
-
 
     if len(screenshot.shape) == 3:  # RGBの場合
         screenshot_gray = cv2.cvtColor(screenshot, cv2.COLOR_RGB2GRAY)
@@ -38,15 +41,17 @@ def locale_on_screen(target_paths):
         elif len(template.shape) == 3:  # RGBの場合
             template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 
-    
         # テンプレートマッチング
-        result = cv2.matchTemplate(screenshot_gray , template, cv2.TM_CCOEFF_NORMED)
+        result = cv2.matchTemplate(
+            screenshot_gray, template, cv2.TM_CCOEFF_NORMED
+        )
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if max_val >= 0.6:
-            return max_loc[0] + template.shape[1] // 2, max_loc[1] + template.shape[0] // 2
+            return (
+                max_loc[0] + template.shape[1] // 2,
+                max_loc[1] + template.shape[0] // 2,
+            )
     return None
-
-
 
 
 screenshot = pyautogui.screenshot("current_screen.png")
@@ -54,7 +59,7 @@ print("Screenshot saved as current_screen.png")
 
 
 if any(map(lambda f: not os.path.exists(f), files)):
-    print("File not found:", files)
+    sys.exit()
     os.exit()
 
 while True:
@@ -64,5 +69,3 @@ while True:
         pyautogui.click(location)
     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     time.sleep(10)
-
-
