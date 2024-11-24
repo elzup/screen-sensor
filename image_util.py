@@ -1,4 +1,5 @@
-from typing import Union
+from functools import partial
+from typing import Iterable, Union
 import cv2
 import numpy as np
 
@@ -28,9 +29,15 @@ def get_mats(paths):
     return list(map(grayscale_patch, mats))
 
 
+def find(a: Iterable):
+    return next(filter(bool, a), None)
+
+
 def locale_on_screen(mats, screenshot):
     screenshot = grayscale_patch_ss(screenshot)
-    return next(map(lambda mat: template_match(mat, screenshot), mats), None)
+    scrren_match = partial(template_match, screenshot=screenshot)
+
+    return find(map(scrren_match, mats))
 
 
 def template_match(mat: MatLike, screenshot) -> Union[None, tuple[int, int]]:
@@ -38,6 +45,7 @@ def template_match(mat: MatLike, screenshot) -> Union[None, tuple[int, int]]:
     # テンプレートマッチング
     result = cv2.matchTemplate(screenshot, mat, cv2.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+    print(f"{min_val=}, {max_val=}, {min_loc=}, {max_loc=}")
     if max_val >= 0.6:
         return (
             max_loc[0] + mat.shape[1] // 2,

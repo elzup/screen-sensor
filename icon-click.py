@@ -12,7 +12,8 @@ def check_screen(mats):
 
 
 def main():
-    files, ok = load_config()
+    files, ok, filenames = load_config()
+    print(filenames)
 
     if not ok:
         print("Some files are missing. ./scouts/*.png is required.")

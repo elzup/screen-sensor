@@ -21,7 +21,7 @@ def load_config():
     files = list(map(path_fix, scouts_files))
     files = list(filter(os.path.exists, files))
 
-    return files, len(files) > 0.0
+    return files, len(files) > 0.0, scouts_files
 
 
 def log_print():
