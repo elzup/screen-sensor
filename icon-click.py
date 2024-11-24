@@ -1,5 +1,5 @@
 from config import cooltime, load_config, log_print
-from gui_util import click, screenshot
+from gui_util import click_back, screenshot
 from image_util import get_mats, locale_on_screen
 
 
@@ -8,7 +8,7 @@ def check_screen(mats):
     location = locale_on_screen(mats, ss)
 
     if location is not None:
-        click(location)
+        click_back(location)
 
 
 def main():
