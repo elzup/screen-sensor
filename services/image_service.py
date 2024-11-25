@@ -4,7 +4,7 @@ from typing import Iterable, Optional, TypeVar, Union
 import cv2
 import numpy as np
 
-from ..schemas import MatLike, ScoutProfile
+from schemas import MatLike, ScoutProfile
 
 
 def get_mat(path):
