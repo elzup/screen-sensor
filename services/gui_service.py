@@ -5,12 +5,12 @@ def screenshot():
     return pyautogui.screenshot()
 
 
-def is_pressed():
-    return pyautogui.mouseDown()
-
-
 def click(location):
     pyautogui.click(location)
+
+
+def mouseup():
+    pyautogui.mouseUp()
 
 
 def move(location):
@@ -19,5 +19,6 @@ def move(location):
 
 def click_back(location):
     prev_pos = pyautogui.position()
+    mouseup()
     pyautogui.click(location)
     move(prev_pos)
