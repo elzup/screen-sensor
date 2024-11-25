@@ -2,7 +2,12 @@ import pyautogui
 
 
 def screenshot():
-    return pyautogui.screenshot()
+    try:
+        ss = pyautogui.screenshot()
+        return ss
+    except Exception as e:
+        print(f"Failed to take screenshot: {e}")
+    return None
 
 
 def click(location):

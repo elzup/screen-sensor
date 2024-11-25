@@ -6,6 +6,8 @@ from services.image_service import get_mats, locale_on_screen
 
 def check_screen(mats):
     ss = screenshot()
+    if ss is None:
+        return
     location = locale_on_screen(mats, ss)
 
     if location is not None:
