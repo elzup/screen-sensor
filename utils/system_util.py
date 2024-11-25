@@ -13,8 +13,8 @@ def exit():
     sys.exit()
 
 
-def cooltime():
-    time.sleep(cooltime_seconds)
+def sleep(s=cooltime_seconds):
+    time.sleep(s)
 
 
 def load_config():
