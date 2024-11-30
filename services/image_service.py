@@ -48,7 +48,7 @@ def locale_on_screen_mut(
     for scout in scouts:
         res = screen_match(scout)
         scout.check = res
-        if res is not None:
+        if res is not None and res.hit:
             find_mat = scout
             break
 

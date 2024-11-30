@@ -79,7 +79,7 @@ def check_screen_profile(scouts: list[ScoutProfile]):
 def format_val(val: ScoutProfile) -> str:
     if val.check is None:
         return gray("----")
-    deco = gray if val.check.value >= 0.6 else str
+    deco = gray if val.check.value < 0.6 else str
     # 0.9876 -> 98.8
     return deco(f"{(val.check.value * 100):.1f}")
 
