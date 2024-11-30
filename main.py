@@ -21,12 +21,17 @@ def check_screen(profiles: list[ScoutProfile]) -> Union[ScoutProfile, None]:
     return p
 
 
+def split_filename(filename):
+    filename = filename.split("/")[-1]
+    basename = filename.split(".")[0]
+    return filename, basename
+
+
 def filename_profile(filename):
     # *_c999s_d999.png -> cooltime: 999, detect: 0.999
     # each value optional
+    filename, basename = split_filename(filename)
 
-    filename = filename.split("/")[-1]
-    basename = filename.split(".")[0]
     cooltime = 0
     detect = 0.6
     # use match
@@ -63,17 +68,24 @@ def main():
     profiles = [to_profile(f) for f in files]
     for i, p in enumerate(profiles):
         p.mat = mats[i]
-
     while True:
-        log_print()
-        p = check_screen(profiles)
-        if p is not None:
-            print(f"hit {p.filename}")
-            if p.cooltime > 0:
-                print(f"cooltime {p.cooltime}")
-                sleep(p.cooltime)
-
+        check_screen_profile(profiles)
         sleep()
+
+
+def check_screen_profile(profiles: list[ScoutProfile]):
+    log_print()
+    p = check_screen(profiles)
+    if p is None:
+        return
+    hit_log(p)
+
+
+def hit_log(p: ScoutProfile):
+    print(f"hit {p.filename}")
+    if p.cooltime > 0:
+        print(f"cooltime {p.cooltime}")
+        sleep(p.cooltime)
 
 
 if __name__ == "__main__":
