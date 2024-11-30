@@ -24,7 +24,7 @@ class ScoutProfile:
     check: Optional[CheckResult] = None
 
     def head(self):
-        return gray(f"{self.filename[:5]}")
+        return gray(f"{self.filename[:4]}")
 
 
 def reset_profiles(profiles):

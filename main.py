@@ -14,8 +14,8 @@ def check_screen_mut(scouts: list[ScoutProfile]):
         return
     hit = locale_on_screen_mut(scouts, ss)
 
-    if hit is not None:
-        click_back((hit.px, hit.py))
+    if hit is not None and hit.check is not None:
+        click_back((hit.check.px, hit.check.py))
 
 
 def split_filename(filename):

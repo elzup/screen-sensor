@@ -37,7 +37,9 @@ def find(a: Iterable[T]) -> Optional[T]:
     return next(filter(bool, a), None)
 
 
-def locale_on_screen_mut(scouts: list[ScoutProfile], screenshot):
+def locale_on_screen_mut(
+    scouts: list[ScoutProfile], screenshot
+) -> Optional[ScoutProfile]:
     screenshot = grayscale_patch_ss(screenshot)
     screen_match = partial(template_match, screenshot=screenshot)
 
@@ -45,8 +47,9 @@ def locale_on_screen_mut(scouts: list[ScoutProfile], screenshot):
 
     for scout in scouts:
         res = screen_match(scout)
+        scout.check = res
         if res is not None:
-            find_mat = res
+            find_mat = scout
             break
 
     return find_mat
