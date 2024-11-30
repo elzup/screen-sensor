@@ -41,23 +41,34 @@ def locale_on_screen(scouts: list[ScoutProfile], screenshot):
     screenshot = grayscale_patch_ss(screenshot)
     scrren_match = partial(template_match, screenshot=screenshot)
 
-    return find(map(scrren_match, scouts))
+    checks: list[float] = []
+    find_mat = None
+
+    for scout in scouts:
+        res, val = scrren_match(scout)
+        checks.append(val)
+        if res is not None:
+            find_mat = res
+            break
+
+    return find_mat, checks
+    # return find(map(scrren_match, scouts))
 
 
 def template_match(
     scout: ScoutProfile, screenshot
-) -> Union[None, tuple[int, int, ScoutProfile]]:
+) -> tuple[Union[None, tuple[int, int, ScoutProfile]], float]:
 
     if scout.mat is None:
-        return None
+        return None, 0
     # テンプレートマッチング
     result = cv2.matchTemplate(screenshot, scout.mat, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
-    print(f"{max_val=}, {max_loc}")
+    # print(f"{max_val=}, {max_loc}")
     if max_val >= scout.detect:
         return (
             max_loc[0] + scout.mat.shape[1] // 2,
             max_loc[1] + scout.mat.shape[0] // 2,
             scout,
-        )
-    return None
+        ), max_val
+    return None, max_val

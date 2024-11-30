@@ -8,17 +8,19 @@ from services.log_service import log_print
 from utils.system_util import load_config, sleep
 
 
-def check_screen(profiles: list[ScoutProfile]) -> Union[ScoutProfile, None]:
+def check_screen(
+    profiles: list[ScoutProfile],
+) -> Union[tuple[ScoutProfile, list[float]], None]:
     ss = screenshot()
     if ss is None:
         return None
-    location = locale_on_screen(profiles, ss)
+    location, checks = locale_on_screen(profiles, ss)
 
     if location is None:
         return None
     x, y, p = location
     click_back((x, y))
-    return p
+    return p, checks
 
 
 def split_filename(filename):
@@ -75,13 +77,18 @@ def main():
 
 def check_screen_profile(profiles: list[ScoutProfile]):
     log_print()
-    p = check_screen(profiles)
-    if p is None:
+    res = check_screen(profiles)
+    if res is None:
         return
-    hit_log(p)
+    hit_log(res[0], res[1])
 
 
-def hit_log(p: ScoutProfile):
+def format_val(val: float) -> str:
+    return f"{val:.3f}"
+
+
+def hit_log(p: ScoutProfile, checks: list[float]):
+    print(" ".join(map(format_val, checks)))
     print(f"hit {p.filename}")
     if p.cooltime > 0:
         print(f"cooltime {p.cooltime}")
