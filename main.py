@@ -8,16 +8,19 @@ from services.log_service import log_print
 from utils.system_util import load_config, sleep
 
 
+CheckAllResult = tuple[Union[ScoutProfile, None], list[float]]
+
+
 def check_screen(
     profiles: list[ScoutProfile],
-) -> Union[tuple[ScoutProfile, list[float]], None]:
+) -> CheckAllResult:
     ss = screenshot()
     if ss is None:
-        return None
+        return None, []
     location, checks = locale_on_screen(profiles, ss)
 
     if location is None:
-        return None
+        return None, checks
     x, y, p = location
     click_back((x, y))
     return p, checks
@@ -78,17 +81,19 @@ def main():
 def check_screen_profile(profiles: list[ScoutProfile]):
     log_print()
     res = check_screen(profiles)
-    if res is None:
-        return
-    hit_log(res[0], res[1])
+    hit_log(res)
 
 
 def format_val(val: float) -> str:
     return f"{val:.3f}"
 
 
-def hit_log(p: ScoutProfile, checks: list[float]):
+def hit_log(result: CheckAllResult):
+    p, checks = result
+
     print(" ".join(map(format_val, checks)))
+    if p is None:
+        return
     print(f"hit {p.filename}")
     if p.cooltime > 0:
         print(f"cooltime {p.cooltime}")
