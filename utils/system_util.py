@@ -23,3 +23,7 @@ def load_config():
     files = list(filter(os.path.exists, files))
 
     return files, len(files) > 0.0, scouts_files
+
+
+def gray(s: str):
+    return f"\033[90m#{s}\033[0m"

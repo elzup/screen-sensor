@@ -4,7 +4,7 @@ from typing import Iterable, Optional, TypeVar, Union
 import cv2
 import numpy as np
 
-from schemas import MatLike, ScoutProfile
+from schemas import CheckResult, MatLike, ScoutProfile
 
 
 def get_mat(path):
@@ -37,38 +37,32 @@ def find(a: Iterable[T]) -> Optional[T]:
     return next(filter(bool, a), None)
 
 
-def locale_on_screen(scouts: list[ScoutProfile], screenshot):
+def locale_on_screen_mut(scouts: list[ScoutProfile], screenshot):
     screenshot = grayscale_patch_ss(screenshot)
-    scrren_match = partial(template_match, screenshot=screenshot)
+    screen_match = partial(template_match, screenshot=screenshot)
 
-    checks: list[float] = []
     find_mat = None
 
     for scout in scouts:
-        res, val = scrren_match(scout)
-        checks.append(val)
+        res = screen_match(scout)
         if res is not None:
             find_mat = res
             break
 
-    return find_mat, checks
+    return find_mat
     # return find(map(scrren_match, scouts))
 
 
-def template_match(
-    scout: ScoutProfile, screenshot
-) -> tuple[Union[None, tuple[int, int, ScoutProfile]], float]:
-
+def template_match(scout: ScoutProfile, screenshot) -> Optional[CheckResult]:
     if scout.mat is None:
-        return None, 0
+        return None
     # テンプレートマッチング
     result = cv2.matchTemplate(screenshot, scout.mat, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     # print(f"{max_val=}, {max_loc}")
-    if max_val >= scout.detect:
-        return (
-            max_loc[0] + scout.mat.shape[1] // 2,
-            max_loc[1] + scout.mat.shape[0] // 2,
-            scout,
-        ), max_val
-    return None, max_val
+    return CheckResult(
+        max_val >= scout.detect,
+        max_val,
+        max_loc[0] + scout.mat.shape[1] // 2,
+        max_loc[1] + scout.mat.shape[0] // 2,
+    )
