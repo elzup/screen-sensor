@@ -59,13 +59,12 @@ def locale_on_screen_mut(
 def template_match(scout: ScoutProfile, screenshot) -> Optional[CheckResult]:
     if scout.mat is None:
         return None
-    # テンプレートマッチング
     result = cv2.matchTemplate(screenshot, scout.mat, cv2.TM_CCOEFF_NORMED)
-    _, max_val, _, max_loc = cv2.minMaxLoc(result)
-    # print(f"{max_val=}, {max_loc}")
+    # max_val
+    _, value, _, [x, y] = cv2.minMaxLoc(result)
     return CheckResult(
-        max_val >= scout.detect,
-        max_val,
-        max_loc[0] + scout.mat.shape[1] // 2,
-        max_loc[1] + scout.mat.shape[0] // 2,
+        value >= scout.detect,
+        value,
+        x + scout.mat.shape[1] // 2,
+        y + scout.mat.shape[0] // 2,
     )
