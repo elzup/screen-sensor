@@ -26,4 +26,4 @@ def load_config():
 
 
 def gray(s: str):
-    return f"\033[90m#{s}\033[0m"
+    return f"\033[90m{s}\033[0m"

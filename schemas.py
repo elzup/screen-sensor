@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import Optional, Union
 import numpy as np
 
+from utils.system_util import gray
+
 MatLike = Union[np.ndarray]
 
 
@@ -22,7 +24,7 @@ class ScoutProfile:
     check: Optional[CheckResult] = None
 
     def head(self):
-        return f"{self.filename[:5]}"
+        return gray(f"{self.filename[:5]}")
 
 
 def reset_profiles(profiles):
