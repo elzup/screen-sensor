@@ -5,7 +5,7 @@ from schemas import ScoutProfile, reset_profiles
 from services.gui_service import click_back, screenshot
 from services.image_service import get_mats, locale_on_screen_mut
 from services.log_service import log_time_print
-from utils.system_util import gray, load_config, sleep
+from utils.system_util import gray, load_config, sleep, basename
 
 
 def check_screen_mut(scouts: list[ScoutProfile]):
@@ -19,9 +19,9 @@ def check_screen_mut(scouts: list[ScoutProfile]):
 
 
 def split_filename(filename):
-    filename = filename.split("/")[-1]
-    basename = filename.split(".")[0]
-    return filename, basename
+    filename = basename(filename.split("/")[-1])
+    id = filename.split(".")[0]
+    return filename, id
 
 
 def filename_profile(filename):
