@@ -67,4 +67,6 @@ def template_match(scout: ScoutProfile, screenshot) -> Optional[CheckResult]:
         value,
         x + scout.mat.shape[1] // 2,
         y + scout.mat.shape[0] // 2,
+        h=screenshot.size[1],
+        w=screenshot.size[0],
     )

@@ -13,6 +13,8 @@ class CheckResult:
     value: float
     px: int
     py: int
+    h: int
+    w: int
 
 
 @dataclass

@@ -5,14 +5,17 @@ from schemas import ScoutProfile, reset_profiles
 from services.gui_service import click_back, screenshot
 from services.image_service import get_mats, locale_on_screen_mut
 from services.log_service import log_time_print
+from utils.plot import draw_grid_with_mark
 from utils.system_util import gray, load_config, sleep, basename
 
 
 def check_screen_mut(scouts: list[ScoutProfile]):
     ss = screenshot()
+
     if ss is None:
         return
     hit = locale_on_screen_mut(scouts, ss)
+    # width, height = ss.size
 
     if hit is not None and hit.check is not None:
         click_back((hit.check.px, hit.check.py))
@@ -76,10 +79,24 @@ def check_screen_profile(scouts: list[ScoutProfile]):
     hit_log(hit, scouts)
 
 
+def filter_none(l):
+    return [x for x in l if x is not None]
+
+
 def hit_log(hit: Optional[ScoutProfile], scouts: list[ScoutProfile]):
     log_time_print()
+    if len(scouts) == 0:
+        return
     print(" ".join(map(ScoutProfile.head, scouts)))
     print(" ".join(map(ScoutProfile.score, scouts)))
+    s = scouts[0].check
+    if s is not None:
+        print(
+            draw_grid_with_mark(
+                s.h, s.w, filter_none([s.check for s in scouts])
+            )
+        )
+
     if hit is None:
         return
     print(f"hit {hit.filename}")
