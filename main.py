@@ -2,7 +2,7 @@ import re
 from typing import Optional, Union
 
 from schemas import ScoutProfile, reset_profiles
-from services.gui_service import click_back, screenshot
+from services.gui_service import click_back, screen_size, screenshot
 from services.image_service import get_mats, locale_on_screen_mut
 from services.log_service import log_time_print
 from utils.plot import draw_grid_with_mark
@@ -11,10 +11,11 @@ from utils.system_util import gray, load_config, sleep, basename
 
 def check_screen_mut(scouts: list[ScoutProfile]):
     ss = screenshot()
+    size = screen_size()
 
     if ss is None:
         return
-    hit = locale_on_screen_mut(scouts, ss)
+    hit = locale_on_screen_mut(scouts, ss, size)
     # width, height = ss.size
 
     if hit is not None and hit.check is not None:

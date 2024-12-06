@@ -27,3 +27,7 @@ def click_back(location):
     mouseup()
     pyautogui.click(location)
     move(prev_pos)
+
+
+def screen_size():
+    return pyautogui.size()

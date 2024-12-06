@@ -38,10 +38,10 @@ def find(a: Iterable[T]) -> Optional[T]:
 
 
 def locale_on_screen_mut(
-    scouts: list[ScoutProfile], screenshot
+    scouts: list[ScoutProfile], screenshot, size
 ) -> Optional[ScoutProfile]:
     screenshot = grayscale_patch_ss(screenshot)
-    screen_match = partial(template_match, screenshot=screenshot)
+    screen_match = partial(template_match, screenshot=screenshot, size=size)
 
     find_mat = None
 
@@ -56,7 +56,9 @@ def locale_on_screen_mut(
     # return find(map(scrren_match, scouts))
 
 
-def template_match(scout: ScoutProfile, screenshot) -> Optional[CheckResult]:
+def template_match(
+    scout: ScoutProfile, screenshot, size
+) -> Optional[CheckResult]:
     if scout.mat is None:
         return None
     result = cv2.matchTemplate(screenshot, scout.mat, cv2.TM_CCOEFF_NORMED)
@@ -67,6 +69,6 @@ def template_match(scout: ScoutProfile, screenshot) -> Optional[CheckResult]:
         value,
         x + scout.mat.shape[1] // 2,
         y + scout.mat.shape[0] // 2,
-        h=screenshot.size[1],
-        w=screenshot.size[0],
+        h=size[0],
+        w=size[1],
     )
