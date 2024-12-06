@@ -10,7 +10,7 @@ def hit_char(
     return (
         mark
         if any(
-            j <= c.px < j + w / wr and i <= c.py < i + h / hr for c in checks
+            j <= c.px < j + w // wr and i <= c.py < i + h // hr for c in checks
         )
         else " "
     )
@@ -18,9 +18,11 @@ def hit_char(
 
 def draw_grid_with_mark(h: int, w: int, checks: list[CheckResult], mark="*"):
     grid = []
-    for i in range(0, h, hr):
+    wc = w // wr
+    hc = h // hr
+    for i in range(0, h, hc):
         row = []
-        for j in range(0, w, wr):
+        for j in range(0, w, wc):
             row.append(hit_char(j, i, h, w, checks, mark))
         grid.append(row)
 
