@@ -23,8 +23,17 @@ class ScoutProfile:
     mat: Optional[MatLike] = None
     check: Optional[CheckResult] = None
 
-    def head(self):
-        return gray(f"{self.filename[:4]}")
+    def head(self) -> str:
+        return gray(f"{self.filename[:7].ljust(5)}")
+
+    def score(self) -> str:
+        if self.check is None:
+            return gray("----")
+        deco = gray if self.check.value < 0.7 else str
+        # 0.9876 -> 98.8
+        sc = f"{(self.check.value * 100):.1f}".ljust(2)
+        den = f"{(self.detect * 100):.0f}".ljust(2)
+        return deco(f"{sc}/{den}")
 
 
 def reset_profiles(profiles):

@@ -76,18 +76,10 @@ def check_screen_profile(scouts: list[ScoutProfile]):
     hit_log(hit, scouts)
 
 
-def format_val(val: ScoutProfile) -> str:
-    if val.check is None:
-        return gray("----")
-    deco = gray if val.check.value < 0.6 else str
-    # 0.9876 -> 98.8
-    return deco(f"{(val.check.value * 100):.1f}")
-
-
 def hit_log(hit: Optional[ScoutProfile], scouts: list[ScoutProfile]):
     log_time_print()
     print(" ".join(map(ScoutProfile.head, scouts)))
-    print(" ".join(map(format_val, scouts)))
+    print(" ".join(map(ScoutProfile.score, scouts)))
     if hit is None:
         return
     print(f"hit {hit.filename}")
