@@ -1,6 +1,10 @@
 import pyautogui
 
 
+class GuiException(pyautogui.FailSafeException):
+    pass
+
+
 def screenshot():
     try:
         ss = pyautogui.screenshot()

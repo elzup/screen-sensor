@@ -1,8 +1,13 @@
 import re
-from typing import Optional, Union
+from typing import Optional
 
 from schemas import ScoutProfile, reset_profiles
-from services.gui_service import click_back, screen_size, screenshot
+from services.gui_service import (
+    click_back,
+    screen_size,
+    screenshot,
+    GuiException,
+)
 from services.image_service import get_mats, locale_on_screen_mut
 from services.log_service import log_time_print
 from utils.plot import draw_grid_with_mark
@@ -106,5 +111,17 @@ def hit_log(hit: Optional[ScoutProfile], scouts: list[ScoutProfile]):
         sleep(hit.cooltime)
 
 
+def keep_main():
+    while True:
+        try:
+            main()
+        except GuiException as e:
+            print(f"GuiException: {e}")
+
+
 if __name__ == "__main__":
-    main()
+    try:
+        keep_main()
+    except KeyboardInterrupt:
+        print("Bye")
+        exit(0)
